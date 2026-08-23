@@ -838,12 +838,25 @@
   }
   .btn-call:hover { border-color: var(--white); }
   .cta-tagline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  .cta-tagline-display {
     font-family: var(--font-display);
-    font-size: clamp(36px, 4vw, 56px);
     font-style: italic;
     font-weight: 600;
     color: var(--gold);
-    letter-spacing: 0.01em;
+    font-size: clamp(32px, 3.8vw, 50px);
+    line-height: 1.1;
+  }
+  .cta-tagline-body {
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: var(--gold);
+    font-size: clamp(32px, 3.8vw, 50px);
+    line-height: 1.1;
   }
 
   /* ── FOOTER ── */
@@ -1420,7 +1433,7 @@
       <a href="https://wa.me/919537968007?text=Hi%20Event%201O1%2C%20I%20want%20to%20plan%20an%20event" target="_blank" rel="noopener" class="btn-wa">💬 WhatsApp +91 95379 68007</a>
       <a href="tel:+919537968007" class="btn-call">📞 Call Us</a>
     </div>
-    <p class="cta-tagline reveal d3">Event है? Call 1O1.</p>
+    <div class="cta-tagline reveal d3">   <span class="cta-tagline-display">Event है?&nbsp;</span>   <span class="cta-tagline-body">Call 1O1.</span> </div>
   </div>
 </section>
 
