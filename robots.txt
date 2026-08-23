@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /blog/*/feed
+Disallow: /website/social/
+Disallow: /website/form/
+Disallow: /website/translations
+Disallow: /event/
+Disallow: /event?
+
+Sitemap: https://www.event1o1.com/sitemap.xml
