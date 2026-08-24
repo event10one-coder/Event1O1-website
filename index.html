@@ -920,7 +920,7 @@
     grid-template-columns: 1fr 1fr;
     position: relative;
   }
-  .modal-img-col img { width: 100%; height: 100%; object-fit: cover; min-height: 360px; }
+  .modal-img-col img { width: 100%; height: 100%; object-fit: cover; min-height: 360px; transition: opacity 0.2s ease; }
   .modal-detail-col { padding: 40px 36px; }
   .modal-close {
     position: absolute;
@@ -1517,7 +1517,7 @@ const allSvcData = {
   'corporate': { img: 'https://www.event1o1.com/web/image/1416-0e3a23c5/Design-a-Stage-1024x574.jpeg', alt: 'Corporate event management in Ahmedabad by Event 1O1', cat: 'Corporate', title: 'Corporate Event Management', desc: 'Annual days, product launches, conferences, award nights and BTL activations — executed with full production.', features: ['Annual Days & Conferences','Product Launches & Activations','Award Nights & Gala Dinners','LED Screen & Stage Setup','Professional Anchor & AV','BTL Brand Activations'], wa: 'I+need+corporate+event+management' },
   'festive': { img: 'https://www.event1o1.com/web/image/1423-28764433/stage%20sfx1.jpg', alt: 'Festive event management Ahmedabad by Event 1O1', cat: 'Festive', title: 'Festive Event Management', desc: 'High-energy festive events — Go Pagal Holi (7 seasons), Navratri Garba, NYE parties and more.', features: ['Go Pagal Holi — 7 Seasons','Navratri Garba Nights','New Year Eve Parties','Full Stage & SFX Production','DJ + Live Dhol','Crowd Management'], wa: 'I+need+festive+event+management' },
   'dj-sound': { img: 'https://www.event1o1.com/web/image/1414-1364223b/Sound1.jpg', alt: 'Professional DJ sound system for events in Ahmedabad by Event 1O1', cat: 'DJ & Sound', title: 'Professional DJ Sound System', desc: 'Concert-grade DJ sound for weddings, corporate and celebrations. Line arrays, subs, wireless mics — in-house.', features: ['Line Array Sound System','Professional DJ Console','Wireless Microphones','Backup Equipment Ready','Sound Check & Testing','Full Setup & Pack Down'], wa: 'I+need+DJ+sound+system' },
-  'dj-artist': { img: 'https://www.event1o1.com/unsplash/g763DLmVJO8/1415/dj.jpg', alt: 'DJ artist performance for weddings and events in Ahmedabad by Event 1O1', cat: 'Artist', title: 'DJ Artist Performance', desc: 'Live DJ performances for weddings, corporate and festive events. Custom set-lists for every crowd.', features: ['Bollywood, Punjabi & Garba Sets','Custom Music Set-Lists','Live Crowd Reading','Retro & EDM Mashups','Wedding Entry Music','Corporate Background Sets'], wa: 'I+need+a+DJ+artist' },
+  'dj-artist': { img: 'https://www.event1o1.com/web/image/4018', alt: 'DJ artist performance for weddings and events in Ahmedabad by Event 1O1', cat: 'Artist', title: 'DJ Artist Performance', desc: 'Live DJ performances for weddings, corporate and festive events. Custom set-lists for every crowd.', features: ['Bollywood, Punjabi & Garba Sets','Custom Music Set-Lists','Live Crowd Reading','Retro & EDM Mashups','Wedding Entry Music','Corporate Background Sets'], wa: 'I+need+a+DJ+artist' },
   'led-stage': { img: 'https://www.event1o1.com/web/image/1416-0e3a23c5/Design-a-Stage-1024x574.jpeg', alt: 'LED screen and stage setup for events in Ahmedabad by Event 1O1', cat: 'Stage & LED', title: 'LED Screen & Stage Setup', desc: 'Professional LED screens, truss and stage setups. Full design, installation and operation by us.', features: ['P3/P4 LED Video Walls','Custom Stage Design','Truss & Rigging Systems','Stage Lighting Integration','Technical Crew On-Site','Load-In to Load-Out'], wa: 'I+need+LED+and+stage+setup' },
   'truss': { img: 'https://www.event1o1.com/web/image/1251-7b522d04/istockphoto-2160462743-612x612.jpg', alt: 'Truss lighting setup for events in Ahmedabad by Event 1O1', cat: 'Lighting', title: 'Truss Lighting Setup', desc: 'Professional truss rigs with moving heads, LED pars, lasers and beam effects.', features: ['Moving Head Fixtures','LED Par Can Arrays','Laser & Beam Effects','Truss Structure Setup','DMX Programming','Custom Light Shows'], wa: 'I+need+truss+lighting' },
   'anchor': { img: 'https://www.event1o1.com/web/image/1257-e92aae30/Rozlin-Pattanaik-Anchor-3.jpg', alt: 'Professional anchor and MC services for events in Ahmedabad by Event 1O1', cat: 'Anchor & Host', title: 'Professional Anchor Services', desc: 'Experienced MCs for weddings, corporate and award ceremonies. Hindi, English, Gujarati.', features: ['Wedding MC & Host','Corporate Event Anchor','Award Night Hosting','Bilingual Hosting','Script Preparation','On-Site Rehearsal'], wa: 'I+need+an+anchor' },
@@ -1539,8 +1539,11 @@ function openSvcModal(key) {
   const d = allSvcData[key];
   if (!d) return;
   lastFocused = document.activeElement;
-  document.getElementById('modalImg').src = d.img;
-  document.getElementById('modalImg').alt = d.alt;
+  const modalImg = document.getElementById('modalImg');
+  modalImg.style.opacity = '0';
+  modalImg.onload = () => { modalImg.style.opacity = '1'; };
+  modalImg.src = d.img;
+  modalImg.alt = d.alt;
   document.getElementById('modalCat').textContent = d.cat;
   document.getElementById('modalTitle').textContent = d.title;
   document.getElementById('modalDesc').textContent = d.desc;
