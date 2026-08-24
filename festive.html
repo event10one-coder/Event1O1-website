@@ -272,7 +272,7 @@
   .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.82); backdrop-filter: blur(6px); z-index: 1100; align-items: center; justify-content: center; padding: 24px; }
   .modal-backdrop.open { display: flex; }
   .modal-box { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; width: 100%; max-width: 860px; max-height: 90vh; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; position: relative; }
-  .modal-img-col img { width: 100%; height: 100%; object-fit: cover; min-height: 360px; }
+  .modal-img-col img { width: 100%; height: 100%; object-fit: cover; min-height: 360px; transition: opacity 0.2s ease; }
   .modal-detail-col { padding: 40px 36px; }
   .modal-close { position: absolute; top: 16px; right: 20px; background: rgba(13,13,13,0.7); border: 1px solid var(--border); color: var(--cream); font-size: 22px; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; transition: background 0.2s; z-index: 10; font-family: var(--font-body); }
   .modal-close:hover { background: var(--gold); color: #0D0D0D; }
@@ -717,8 +717,11 @@ function openSvcModal(key) {
   const d = allSvcData[key];
   if (!d) return;
   lastFocused = document.activeElement;
-  document.getElementById('modalImg').src = d.img;
-  document.getElementById('modalImg').alt = d.alt;
+  const modalImg = document.getElementById('modalImg');
+  modalImg.style.opacity = '0';
+  modalImg.onload = () => { modalImg.style.opacity = '1'; };
+  modalImg.src = d.img;
+  modalImg.alt = d.alt;
   document.getElementById('modalCat').textContent = d.cat;
   document.getElementById('modalTitle').textContent = d.title;
   document.getElementById('modalDesc').textContent = d.desc;
