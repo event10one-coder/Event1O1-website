@@ -833,8 +833,11 @@ function openSvcModal(key) {
   const d = allSvcData[key];
   if (!d) return;
   lastFocused = document.activeElement;
-  document.getElementById('modalImg').src = d.img;
-  document.getElementById('modalImg').alt = d.alt;
+  const modalImg = document.getElementById('modalImg');
+  modalImg.style.opacity = '0';
+  modalImg.onload = () => { modalImg.style.opacity = '1'; };
+  modalImg.src = d.img;
+  modalImg.alt = d.alt;
   document.getElementById('modalCat').textContent = d.cat;
   document.getElementById('modalTitle').textContent = d.title;
   document.getElementById('modalDesc').textContent = d.desc;
