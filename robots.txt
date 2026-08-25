@@ -7,3 +7,7 @@ Disallow: /event/
 Disallow: /event?
 
 Sitemap: https://www.event1o1.com/sitemap.xml
+
+# IndexNow
+User-agent: IndexNow
+Allow: /
