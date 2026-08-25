@@ -721,9 +721,8 @@ function openSvcModal(key) {
   lastFocused = document.activeElement;
   const modalImg = document.getElementById('modalImg');
   modalImg.style.opacity = '0';
-  modalImg.src = '';
   modalImg.onload = () => { modalImg.style.opacity = '1'; };
-  setTimeout(() => { modalImg.src = d.img; }, 30);
+  modalImg.src = d.img;
   modalImg.alt = d.alt;
   document.getElementById('modalCat').textContent = d.cat;
   document.getElementById('modalTitle').textContent = d.title;
