@@ -416,4 +416,18 @@
     </div>
   </div>
 </footer>
+
+<script>
+// Move footer and CTA to body level
+document.addEventListener('DOMContentLoaded', function() {
+  var footer = document.querySelector('.footer');
+  var cta = document.querySelector('.article-cta');
+  if (footer && footer.parentElement !== document.body) {
+    document.body.appendChild(footer);
+  }
+  if (cta && cta.parentElement !== document.body) {
+    document.body.insertBefore(cta, footer || null);
+  }
+});
+</script>
 </body></html>
