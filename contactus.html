@@ -186,7 +186,23 @@
   /* Submit */
   .submit-btn { width: 100%; background: var(--gold); color: #0D0D0D; font-family: var(--font-body); font-size: 15px; font-weight: 700; letter-spacing: 0.03em; padding: 16px 24px; border: none; border-radius: 2px; cursor: pointer; transition: background 0.2s, color 0.2s; margin-top: 8px; }
   .submit-btn:hover { background: var(--gold-dark); color: #fff; }
-  .submit-success { display: none; background: rgba(37,211,102,0.1); border: 1px solid rgba(37,211,102,0.3); border-radius: 2px; padding: 16px 20px; margin-top: 16px; font-family: var(--font-body); font-size: 14px; color: #25D366; text-align: center; }
+  .submit-success {
+    display: none;
+    margin-top: 20px;
+    padding: 28px 24px;
+    background: linear-gradient(135deg, #0f2a1a, #0a1f12);
+    border: 1px solid rgba(37,211,102,0.3);
+    border-left: 4px solid #25D366;
+    border-radius: 4px;
+    text-align: center;
+    color: #fff;
+    animation: fadeInUp 0.4s ease;
+  }
+  .submit-success.show { display: block; }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
   .submit-success.show { display: block; }
 
   /* ── HOURS + MAP STRIP ── */
@@ -532,8 +548,13 @@
             </div>
 
             <!-- Submit -->
-            <button type="button" class="submit-btn" id="submitBtn" onclick="handleSubmit()">📩 Send Enquiry — We'll Call You Back</button>
-            <div class="submit-success" id="submitSuccess">✅ Opening WhatsApp... We'll respond within 2 hours!</div>
+            <button type="button" class="submit-btn" id="submitBtn" onclick="handleSubmit()">Send Enquiry →</button>
+            <div class="submit-success" id="submitSuccess">
+  <div style="font-size:28px;margin-bottom:12px;">🎉</div>
+  <strong style="font-size:18px;display:block;margin-bottom:8px;">Thank you for reaching out!</strong>
+  <p style="margin:0 0 12px;color:#ccc;">Our team will get back to you within 2 hours.</p>
+  <p style="margin:0;font-size:13px;color:#aaa;">For urgent queries, WhatsApp us: <a href="https://wa.me/919537968007" target="_blank" style="color:#25D366;">+91 95379 68007</a></p>
+</div>
           </div>
         </div>
       </div>
