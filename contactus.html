@@ -833,7 +833,7 @@ document.getElementById('c-email').addEventListener('blur', validateEmail);
 document.getElementById('c-email').addEventListener('input', () => { if (document.getElementById('c-email').classList.contains('invalid')) validateEmail(); });
 
 // ── FORM SUBMIT ──
-function handleSubmit() {
+async function handleSubmit() {
   const nameOk = validateName();
   const phoneOk = validatePhone();
   const emailOk = validateEmail();
@@ -897,11 +897,43 @@ function handleSubmit() {
     (msg ? `\n💬 Message: ${msg}` : '') +
     `\n\n— Sent from event1o1.com/contactus`;
 
-  window.open('https://wa.me/919537968007?text=' + encodeURIComponent(waMsg), '_blank');
+  // Submit to Odoo CRM
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
 
+  const formData = new FormData();
+  formData.append('contact_name', name);
+  formData.append('phone', phone);
+  formData.append('email_from', email || '');
+  formData.append('description', 
+    `Event Type: ${eventType}\nDate: ${date}\nGuests: ${guests}\nSource: ${source}${condExtra}\nMessage: ${msg}`
+  );
+  formData.append('form_id', 'contact');
+
+  try {
+    await fetch('https://event-1o1.odoo.com/website/form/crm.lead', {
+      method: 'POST',
+      body: formData,
+      mode: 'no-cors'
+    });
+  } catch(e) {
+    console.log('Odoo submit:', e);
+  }
+
+  // Show success
+  btn.textContent = 'Send Enquiry →';
+  btn.disabled = false;
   const successEl = document.getElementById('submitSuccess');
   successEl.classList.add('show');
   successEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  
+  // Reset form
+  document.getElementById('c-name').value = '';
+  document.getElementById('c-phone').value = '';
+  document.getElementById('c-email').value = '';
+  document.getElementById('c-type').value = '';
+  document.getElementById('c-msg').value = '';
 }
 
 // ── PREFERS REDUCED MOTION ──
