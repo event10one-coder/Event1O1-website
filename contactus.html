@@ -897,38 +897,56 @@ async function handleSubmit() {
     (msg ? `\n💬 Message: ${msg}` : '') +
     `\n\n— Sent from event1o1.com/contactus`;
 
-  // Submit to Odoo CRM
+  // Submit to Odoo CRM via JSON-RPC
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.textContent = 'Sending...';
 
-  const formData = new FormData();
-  formData.append('contact_name', name);
-  formData.append('phone', phone);
-  formData.append('email_from', email || '');
-  formData.append('description', 
-    `Event Type: ${eventType}\nDate: ${date}\nGuests: ${guests}\nSource: ${source}${condExtra}\nMessage: ${msg}`
-  );
-  formData.append('form_id', 'contact');
+  const description = [
+    eventType ? `Event Type: ${eventType}` : '',
+    date ? `Date: ${date}` : '',
+    guests ? `Guests: ${guests}` : '',
+    source ? `How did you hear: ${source}` : '',
+    condExtra,
+    msg ? `Message: ${msg}` : ''
+  ].filter(Boolean).join('\n');
 
   try {
-    await fetch('https://event-1o1.odoo.com/website/form/crm.lead', {
+    await fetch('https://event-1o1.odoo.com/web/dataset/call_kw', {
       method: 'POST',
-      body: formData,
-      mode: 'no-cors'
+      headers: {'Content-Type': 'application/json'},
+      mode: 'no-cors',
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'call',
+        id: 1,
+        params: {
+          model: 'crm.lead',
+          method: 'create',
+          args: [{
+            name: `New Enquiry — ${eventType || 'Event'} — ${name}`,
+            contact_name: name,
+            phone: phone,
+            email_from: email || '',
+            description: description,
+            type: 'lead'
+          }],
+          kwargs: {}
+        }
+      })
     });
   } catch(e) {
-    console.log('Odoo submit:', e);
+    console.log('Odoo submit error:', e);
   }
 
-  // Show success
+  // Show success popup
   btn.textContent = 'Send Enquiry →';
   btn.disabled = false;
   const successEl = document.getElementById('submitSuccess');
   successEl.classList.add('show');
   successEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  
-  // Reset form
+
+  // Reset form fields
   document.getElementById('c-name').value = '';
   document.getElementById('c-phone').value = '';
   document.getElementById('c-email').value = '';
