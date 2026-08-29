@@ -1,0 +1,25 @@
+/*
+  # HSTS — tell browsers to always use HTTPS
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+  # Clickjacking protection
+  X-Frame-Options: SAMEORIGIN
+
+  # Cross-Origin-Opener-Policy
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+
+  # Prevent MIME sniffing
+  X-Content-Type-Options: nosniff
+
+  # Referrer policy
+  Referrer-Policy: strict-origin-when-cross-origin
+
+  # CSP in Report-Only mode (monitoring, not enforcing yet)
+  # Sources identified:
+  #   scripts: self only (no external JS)
+  #   styles: self + fonts.googleapis.com
+  #   fonts: fonts.gstatic.com
+  #   images: self + www.event1o1.com + data: (inline SVGs)
+  #   frames: www.google.com (GMB map)
+  #   connect: event-1o1.odoo.com (contact form fetch)
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.event1o1.com https://event-1o1.odoo.com; frame-src https://www.google.com; connect-src 'self' https://event-1o1.odoo.com; object-src 'none'; base-uri 'self'; form-action 'self' https://event-1o1.odoo.com; upgrade-insecure-requests
