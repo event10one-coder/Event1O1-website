@@ -2,9 +2,7 @@ export async function onRequestPost(context) {
   const { request, env } = context;
 
   const corsHeaders = {
-    'Access-Control-Allow-Origin': 'https://www.event1o1.com',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Origin': '*',
     'Content-Type': 'application/json'
   };
 
@@ -18,6 +16,11 @@ export async function onRequestPost(context) {
       });
     }
 
+    const apiKey = env.ODOO_API_KEY;
+    const keyPresent = !!apiKey;
+    const keyLength = apiKey ? apiKey.length : 0;
+    const keyPrefix = apiKey ? apiKey.slice(0, 6) : 'none';
+
     const description = [
       eventType ? `Event Type: ${eventType}` : '',
       date ? `Event Date: ${date}` : '',
@@ -27,12 +30,12 @@ export async function onRequestPost(context) {
       'Source: Website Contact Form'
     ].filter(Boolean).join('\n');
 
-    // Odoo API key — Bearer token auth (confirmed working)
+    // Use Bearer token - confirmed working from Odoo session
     const leadRes = await fetch('https://event-1o1.odoo.com/web/dataset/call_kw', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${env.ODOO_API_KEY}`
+        'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
         jsonrpc: '2.0',
@@ -54,33 +57,37 @@ export async function onRequestPost(context) {
       })
     });
 
+    const odooStatus = leadRes.status;
     const leadData = await leadRes.json();
 
     if (leadData.result) {
       return new Response(JSON.stringify({
         success: true,
-        lead_id: leadData.result
+        lead_id: leadData.result,
+        debug: { keyPresent, keyLength, keyPrefix, odooStatus }
       }), { headers: corsHeaders });
     }
 
     const errMsg = leadData.error?.data?.message || leadData.error?.message || 'CRM error';
-    console.error('Odoo error:', errMsg);
-    return new Response(JSON.stringify({ success: false, error: errMsg }), {
-      status: 500, headers: corsHeaders
-    });
+    return new Response(JSON.stringify({
+      success: false,
+      error: errMsg,
+      debug: { keyPresent, keyLength, keyPrefix, odooStatus }
+    }), { status: 500, headers: corsHeaders });
 
   } catch (err) {
-    console.error('Function error:', err.message);
-    return new Response(JSON.stringify({ success: false, error: err.message }), {
-      status: 500, headers: corsHeaders
-    });
+    return new Response(JSON.stringify({
+      success: false,
+      error: err.message,
+      debug: { envKeys: Object.keys(context.env || {}) }
+    }), { status: 500, headers: corsHeaders });
   }
 }
 
 export async function onRequestOptions() {
   return new Response(null, {
     headers: {
-      'Access-Control-Allow-Origin': 'https://www.event1o1.com',
+      'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type'
     }
