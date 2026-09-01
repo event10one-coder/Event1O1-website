@@ -1575,6 +1575,29 @@ document.getElementById('svcModal').addEventListener('click', function(e) {
 
 // ── NAVBAR SCROLL ──
 
+
+
+function toggleFaq(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = btn.getAttribute('aria-expanded') === 'true';
+  // Close all
+  document.querySelectorAll('.faq-btn').forEach(b => {
+    b.setAttribute('aria-expanded', 'false');
+    b.nextElementSibling.style.maxHeight = null;
+  });
+  // Open clicked if it was closed
+  if (!isOpen) {
+    btn.setAttribute('aria-expanded', 'true');
+    body.style.maxHeight = body.scrollHeight + 'px';
+  }
+}
+
+function closeMobileMenu() {
+  mobileMenu.classList.remove('open');
+  document.body.style.overflow = '';
+  hamburger.focus();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
@@ -1598,11 +1621,7 @@ hamburger.addEventListener('click', () => {
   document.body.style.overflow = 'hidden';
   mobileMenuClose.focus();
 });
-function closeMobileMenu() {
-  mobileMenu.classList.remove('open');
-  document.body.style.overflow = '';
-  hamburger.focus();
-}
+
 mobileMenuClose.addEventListener('click', closeMobileMenu);
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
@@ -1649,20 +1668,7 @@ const counterObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
 
 // ── FAQ ACCORDION ──
-function toggleFaq(btn) {
-  const body = btn.nextElementSibling;
-  const isOpen = btn.getAttribute('aria-expanded') === 'true';
-  // Close all
-  document.querySelectorAll('.faq-btn').forEach(b => {
-    b.setAttribute('aria-expanded', 'false');
-    b.nextElementSibling.style.maxHeight = null;
-  });
-  // Open clicked if it was closed
-  if (!isOpen) {
-    btn.setAttribute('aria-expanded', 'true');
-    body.style.maxHeight = body.scrollHeight + 'px';
-  }
-}
+
 
 // ── PREFERS REDUCED MOTION ──
 if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
