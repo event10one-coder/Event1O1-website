@@ -1581,7 +1581,7 @@ function toggleFaq(btn) {
   const body = btn.nextElementSibling;
   const isOpen = btn.getAttribute('aria-expanded') === 'true';
   // Close all
-  document.querySelectorAll('.faq-btn').forEach(b => {
+  document.querySelectorAll('.faq-q').forEach(b => {
     b.setAttribute('aria-expanded', 'false');
     b.nextElementSibling.style.maxHeight = null;
   });
