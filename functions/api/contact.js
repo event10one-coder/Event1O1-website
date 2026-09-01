@@ -27,14 +27,12 @@ export async function onRequestPost(context) {
       'Source: Website Contact Form'
     ].filter(Boolean).join('\n');
 
-    // Odoo API key auth: Basic base64(login:api_key)
-    const credentials = btoa(`event10one@gmail.com:${env.ODOO_API_KEY}`);
-
+    // Odoo API key — Bearer token auth (confirmed working)
     const leadRes = await fetch('https://event-1o1.odoo.com/web/dataset/call_kw', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Basic ${credentials}`
+        'Authorization': `Bearer ${env.ODOO_API_KEY}`
       },
       body: JSON.stringify({
         jsonrpc: '2.0',
@@ -57,17 +55,15 @@ export async function onRequestPost(context) {
     });
 
     const leadData = await leadRes.json();
-    console.log('Odoo response status:', leadRes.status);
-    console.log('Odoo response:', JSON.stringify(leadData).slice(0, 200));
 
     if (leadData.result) {
-      return new Response(JSON.stringify({ success: true, lead_id: leadData.result }), {
-        headers: corsHeaders
-      });
+      return new Response(JSON.stringify({
+        success: true,
+        lead_id: leadData.result
+      }), { headers: corsHeaders });
     }
 
-    // Log detailed error
-    const errMsg = leadData.error?.data?.message || leadData.error?.message || 'Unknown error';
+    const errMsg = leadData.error?.data?.message || leadData.error?.message || 'CRM error';
     console.error('Odoo error:', errMsg);
     return new Response(JSON.stringify({ success: false, error: errMsg }), {
       status: 500, headers: corsHeaders
