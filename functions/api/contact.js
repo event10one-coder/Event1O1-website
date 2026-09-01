@@ -27,44 +27,19 @@ export async function onRequestPost(context) {
       'Source: Website Contact Form'
     ].filter(Boolean).join('\n');
 
-    // Odoo JSON-RPC with API key authentication
-    // Login first to get session
-    const loginRes = await fetch('https://event-1o1.odoo.com/web/session/authenticate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        method: 'call',
-        id: 1,
-        params: {
-          db: 'event-1o1',
-          login: 'event10one@gmail.com',
-          password: env.ODOO_API_KEY
-        }
-      })
-    });
+    // Odoo API key auth: Basic base64(login:api_key)
+    const credentials = btoa(`event10one@gmail.com:${env.ODOO_API_KEY}`);
 
-    const loginData = await loginRes.json();
-    const sessionCookie = loginRes.headers.get('set-cookie');
-
-    if (!loginData.result?.uid) {
-      console.error('Auth failed:', JSON.stringify(loginData.error || loginData.result));
-      return new Response(JSON.stringify({ success: false, error: 'Auth failed' }), {
-        status: 500, headers: corsHeaders
-      });
-    }
-
-    // Create lead using session cookie
     const leadRes = await fetch('https://event-1o1.odoo.com/web/dataset/call_kw', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': sessionCookie || ''
+        'Authorization': `Basic ${credentials}`
       },
       body: JSON.stringify({
         jsonrpc: '2.0',
         method: 'call',
-        id: 2,
+        id: 1,
         params: {
           model: 'crm.lead',
           method: 'create',
@@ -82,6 +57,8 @@ export async function onRequestPost(context) {
     });
 
     const leadData = await leadRes.json();
+    console.log('Odoo response status:', leadRes.status);
+    console.log('Odoo response:', JSON.stringify(leadData).slice(0, 200));
 
     if (leadData.result) {
       return new Response(JSON.stringify({ success: true, lead_id: leadData.result }), {
@@ -89,13 +66,15 @@ export async function onRequestPost(context) {
       });
     }
 
-    console.error('Lead creation failed:', JSON.stringify(leadData.error));
-    return new Response(JSON.stringify({ success: false, error: 'Lead creation failed' }), {
+    // Log detailed error
+    const errMsg = leadData.error?.data?.message || leadData.error?.message || 'Unknown error';
+    console.error('Odoo error:', errMsg);
+    return new Response(JSON.stringify({ success: false, error: errMsg }), {
       status: 500, headers: corsHeaders
     });
 
   } catch (err) {
-    console.error('Function error:', err.message, err.stack);
+    console.error('Function error:', err.message);
     return new Response(JSON.stringify({ success: false, error: err.message }), {
       status: 500, headers: corsHeaders
     });
