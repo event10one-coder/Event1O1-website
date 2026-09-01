@@ -1574,6 +1574,8 @@ document.getElementById('svcModal').addEventListener('click', function(e) {
 });
 
 // ── NAVBAR SCROLL ──
+
+document.addEventListener('DOMContentLoaded', function() {
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
   navbar.classList.toggle('scrolled', window.scrollY > 60);
@@ -1670,6 +1672,7 @@ if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     el.style.animation = 'none';
   });
 }
+});
 </script>
 <script type="application/ld+json">
 [
