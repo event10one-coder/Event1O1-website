@@ -912,31 +912,27 @@ async function handleSubmit() {
   ].filter(Boolean).join('\n');
 
   try {
-    await fetch('https://event-1o1.odoo.com/web/dataset/call_kw', {
+    // Submit to Cloudflare Pages Function — API key never exposed to browser
+    const res = await fetch('/api/contact', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        jsonrpc: '2.0',
-        method: 'call',
-        id: 1,
-        params: {
-          model: 'crm.lead',
-          method: 'create',
-          args: [{
-            name: `New Enquiry — ${eventType || 'Event'} — ${name}`,
-            contact_name: name,
-            phone: phone,
-            email_from: email || '',
-            description: description,
-            type: 'lead'
-          }],
-          kwargs: {}
-        }
+        name,
+        phone,
+        email,
+        eventType,
+        date,
+        guests,
+        source,
+        msg
       })
     });
+    const data = await res.json();
+    if (!data.success) {
+      console.warn('Lead submission issue:', data.error);
+    }
   } catch(e) {
-    console.log('Odoo submit error:', e);
+    console.warn('Submission error:', e.message);
   }
 
   // Show success popup
