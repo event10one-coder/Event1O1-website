@@ -563,7 +563,6 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && mobileMe
 // ── CATEGORY FILTER ──
 const filterBtns = document.querySelectorAll('.filter-pill');
 const blogCards = document.querySelectorAll('.blog-card');
-const featuredCard = document.querySelector('.featured-article');
 
 filterBtns.forEach(btn => {
   btn.addEventListener('click', () => {
@@ -571,14 +570,7 @@ filterBtns.forEach(btn => {
     btn.classList.add('active');
     const cat = btn.dataset.filter;
 
-    // Handle featured article visibility
-    if (cat === 'all' || featuredCard?.dataset.category === cat) {
-      featuredCard?.style.removeProperty('display');
-    } else {
-      if (featuredCard) featuredCard.style.display = 'none';
-    }
-
-    // Handle grid cards
+    // Featured section always stays visible — filter only controls grid cards
     blogCards.forEach(card => {
       if (cat === 'all' || card.dataset.category === cat) {
         card.classList.remove('hidden');
