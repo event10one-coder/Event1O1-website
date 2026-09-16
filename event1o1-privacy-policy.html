@@ -126,6 +126,15 @@
   .reveal.d1{transition-delay:0.1s;}
   @media(max-width:1024px){.navbar{padding:16px 24px;}.navbar.scrolled{padding:10px 24px;}.nav-links{display:none;}.hamburger{display:flex;}.content-wrap{padding:56px 24px 64px;}.footer-grid{grid-template-columns:1fr 1fr;gap:40px;}.page-cta{padding:56px 24px;}}
   @media(max-width:640px){.hero{padding:100px 20px 48px;}.content-wrap{padding:48px 20px 56px;}.legal-card{padding:22px 20px;}.footer-grid{grid-template-columns:1fr;}.footer{padding:60px 20px 0;}.page-cta-btns{flex-direction:column;align-items:center;}}
+
+/* Site-wide: lining numerals in heading/display font elements for consistent vertical alignment */
+h1, h2, h3, h4,
+.blog-hero h1, .article-wrap h2, .article-wrap h3,
+.hero h1, .section-title, .featured-h2-link h2,
+.why-title, .service-title, .card-title,
+.page-title, .hero-title {
+  font-variant-numeric: lining-nums;
+}
 </style>
 </head>
 <body>

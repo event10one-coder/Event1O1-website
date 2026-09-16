@@ -19,7 +19,16 @@
     .btn-gold{background:var(--gold);color:#0D0D0D;padding:14px 32px;border-radius:2px;font-weight:700;font-size:14px;text-decoration:none;}
     .btn-outline{border:1px solid var(--gold);color:var(--gold);padding:14px 32px;border-radius:2px;font-weight:600;font-size:14px;text-decoration:none;}
     .wa{position:fixed;bottom:28px;right:28px;width:56px;height:56px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);}
-  </style>
+  
+/* Site-wide: lining numerals in heading/display font elements for consistent vertical alignment */
+h1, h2, h3, h4,
+.blog-hero h1, .article-wrap h2, .article-wrap h3,
+.hero h1, .section-title, .featured-h2-link h2,
+.why-title, .service-title, .card-title,
+.page-title, .hero-title {
+  font-variant-numeric: lining-nums;
+}
+</style>
 </head>
 <body>
   <div class="code">404</div>

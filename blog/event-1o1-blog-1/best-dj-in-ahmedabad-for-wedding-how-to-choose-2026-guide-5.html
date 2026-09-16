@@ -84,7 +84,16 @@
   .article-wrap h3 { font-family: var(--font-body); }
   .article-wrap .faq-q, .article-wrap dt { font-family: var(--font-body); font-weight: 600; }
 
-  </style>
+  
+/* Site-wide: lining numerals in heading/display font elements for consistent vertical alignment */
+h1, h2, h3, h4,
+.blog-hero h1, .article-wrap h2, .article-wrap h3,
+.hero h1, .section-title, .featured-h2-link h2,
+.why-title, .service-title, .card-title,
+.page-title, .hero-title {
+  font-variant-numeric: lining-nums;
+}
+</style>
 </head><body>
 <nav class="navbar" id="navbar">
   <a class="nav-logo" href="/">
