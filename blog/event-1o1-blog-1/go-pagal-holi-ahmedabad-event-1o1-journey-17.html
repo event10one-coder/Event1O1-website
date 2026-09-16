@@ -19,10 +19,7 @@
 .breadcrumb-nav{font-size:12px;color:var(--muted);padding:18px 24px;max-width:860px;margin:0 auto;}.breadcrumb-nav a{color:var(--muted);}.breadcrumb-nav a:hover{color:var(--gold);}.breadcrumb-nav span{margin:0 6px;color:var(--border);}@media(max-width:768px){.navbar{padding:16px 20px;}.navbar.scrolled{padding:10px 20px;}.nav-links{display:none;}.hamburger{display:flex;}footer{padding:48px 20px 24px;}.footer-grid{grid-template-columns:1fr 1fr;gap:32px;}.blog-hero{height:45vh;}.article-wrap{} .article-wrap *{box-sizing:border-box;} .article-wrap{padding:36px 16px 56px;}}@media(max-width:480px){.footer-grid{grid-template-columns:1fr;}}
   .article-wrap h3 { font-family: var(--font-body); }
   .article-wrap .faq-q, .article-wrap dt { font-family: var(--font-body); font-weight: 600; }
-  .story-hero-bg{position:absolute;inset:-24px;background:url('/images/go-pagal-sun-backdrop.webp') center/cover no-repeat;filter:blur(18px) brightness(.28);transform:scale(1.12);}
-  .story-hero-art{position:absolute;right:8%;top:50%;width:min(363px,34vw);height:auto;transform:translateY(-46%);z-index:1;border-radius:12px;box-shadow:0 20px 55px rgba(0,0,0,.55);}
-  .story-hero-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(13,13,13,.96) 0%,rgba(13,13,13,.78) 48%,rgba(13,13,13,.2) 100%);}
-  .story-hero .blog-hero-inner{position:relative;z-index:2;margin-left:max(24px,calc((100vw - 860px)/2));margin-right:auto;max-width:650px;}
+  .story-hero-media{width:100%;height:100%;object-fit:cover;object-position:center;}
   .byline{font-family:var(--font-head);font-style:italic;color:var(--cream);font-size:18px;margin-bottom:28px;}
   .story-image{width:45%;margin-top:8px;margin-bottom:22px;}
   .story-image img{display:block;width:100%;height:auto;border-radius:12px;}
@@ -34,11 +31,7 @@
   .lesson-list{counter-reset:lesson;list-style:none!important;margin-left:0!important;}
   .lesson-list li{counter-increment:lesson;background:var(--surface);border-left:3px solid var(--gold);padding:18px 20px;margin-bottom:14px;border-radius:0 8px 8px 0;}
   .lesson-list li::before{content:counter(lesson) ". ";color:var(--gold);font-weight:700;}
-  .video-link{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid rgba(232,160,32,.25);border-radius:8px;padding:14px 18px;margin:4px 0 24px;}
-  @media(max-width:768px){
-    .story-hero-art{right:50%;width:min(363px,72vw);transform:translate(50%,-46%);opacity:.42;}
-    .story-hero-shade{background:rgba(13,13,13,.62);}
-    .story-hero .blog-hero-inner{margin:0 auto;padding:0 20px;}
+   @media(max-width:768px){
     .story-image,.story-image--right,.story-image--left{float:none;width:100%;margin:20px 0;}
     .story-pair{grid-template-columns:1fr;gap:12px;}
     .story-pair img{height:auto;}
@@ -74,9 +67,7 @@
   <a href="/contactus" style="color:var(--gold)">Plan Your Event</a>
 </div>
 <section class="blog-hero story-hero">
-  <div class="story-hero-bg" aria-hidden="true"></div>
-  <img class="story-hero-art" src="/images/go-pagal-sun-backdrop.webp" alt="Colourful giant sun-face stage backdrop with a blue runway at Go Pagal Holi in Ahmedabad" width="363" height="344" fetchpriority="high" decoding="async">
-  <div class="story-hero-shade" aria-hidden="true"></div>
+  <img class="blog-hero-bg story-hero-media" src="/images/go-pagal-sun-backdrop.webp" alt="Colourful giant sun-face stage backdrop with a blue runway at Go Pagal Holi in Ahmedabad" width="363" height="344" fetchpriority="high" decoding="async">
   <div class="blog-hero-content"><div class="blog-hero-inner">
     <p class="blog-eyebrow">Event Story · Holi</p>
     <h1>The Go Pagal Journey: From a WhatsApp-Sold Holi Event to Building Event 1O1</h1>
@@ -175,7 +166,7 @@
 <p>Season 5 was profitable. And it demonstrated something important: when people restrict you, you find better ways to create.</p>
 <div class="story-clear"></div>
 
-<p><a class="video-link" href="https://youtu.be/j1-Xb_pIL-E?si=xukzvmZGMI8M_gU4" target="_blank" rel="noopener noreferrer">▶ Watch the Go Pagal event video on YouTube</a></p>
+<p>See the production in motion in the <a href="https://youtu.be/j1-Xb_pIL-E?si=xukzvmZGMI8M_gU4" target="_blank" rel="noopener noreferrer">Go Pagal event video on YouTube</a>.</p>
 
 <h2>The Ambition Season — Season 6, Holi 2023</h2>
 
