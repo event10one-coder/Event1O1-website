@@ -1,5 +1,5 @@
 User-agent: *
-Disallow: /doctor-demos/
+Disallow: /lead-demos/
 Disallow: /blog/*/feed
 Disallow: /website/social/
 Disallow: /website/form/
