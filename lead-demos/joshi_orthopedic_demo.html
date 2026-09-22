@@ -77,6 +77,25 @@
   .footer-bottom{border-top:1px solid #1e293b; padding-top:18px; text-align:center; font-size:.8rem; color:#64748b;}
   .disclaimer{background:#fffbeb; border:1px solid #fde68a; color:#92400e; font-size:.78rem; text-align:center; padding:8px 14px;}
   .fab{position:fixed; bottom:20px; right:20px; z-index:60; background:var(--whatsapp); color:#fff; width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 24px -8px rgba(37,211,102,.7);}
+  /* Real self-service slot booking */
+  .booking-label{font-weight:700; font-size:.95rem; margin-bottom:12px; color:var(--navy);}
+  .date-tabs{display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; margin-bottom:22px; -webkit-overflow-scrolling:touch;}
+  .date-tab{flex:0 0 auto; min-width:64px; text-align:center; padding:10px 6px; border-radius:12px; border:1.5px solid var(--border); background:#fff; cursor:pointer; font-family:inherit;}
+  .date-tab .dow{display:block; font-size:.72rem; color:var(--slate); font-weight:600; text-transform:uppercase;}
+  .date-tab .dnum{display:block; font-size:1.15rem; font-weight:800; color:var(--navy); margin-top:2px;}
+  .date-tab.active{background:var(--teal); border-color:var(--teal);}
+  .date-tab.active .dow, .date-tab.active .dnum{color:#fff;}
+  .slots-wrap{margin-bottom:8px;}
+  .slots-heading{font-size:.82rem; font-weight:700; color:var(--slate); text-transform:uppercase; letter-spacing:.03em; margin:14px 0 8px;}
+  .slots-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+  @media(min-width:500px){ .slots-grid{grid-template-columns:repeat(4,1fr);} }
+  .slot-btn{padding:11px 6px; border-radius:9px; border:1.5px solid var(--border); background:#fff; font-family:inherit; font-size:.88rem; font-weight:600; color:var(--navy); cursor:pointer;}
+  .slot-btn:hover{border-color:var(--teal);}
+  .slot-btn.selected{background:var(--teal); border-color:var(--teal); color:#fff;}
+  .slot-btn.booked{background:#f1f5f9; color:#94a3b8; text-decoration:line-through; cursor:not-allowed; border-color:var(--border);}
+  .confirm-panel{margin-top:22px; padding-top:22px; border-top:1px dashed var(--border); display:none;}
+  .confirm-panel.show{display:block;}
+  .selected-summary{background:#ecfdf5; border:1px solid #a7f3d0; border-radius:10px; padding:12px 16px; font-size:.9rem; font-weight:600; color:var(--teal-dark); margin-bottom:16px;}
 </style>
 </head>
 <body>
@@ -137,23 +156,131 @@
 </section>
 <section class="appointment" id="appointment">
   <div class="container">
-    <div class="section-head" style="color:#fff;"><h2 style="color:#fff;">Book Your Appointment</h2><p style="color:#d1fae5;">Two simple ways to reach the clinic.</p></div>
+    <div class="section-head" style="color:#fff;"><h2 style="color:#fff;">Book Your Appointment</h2><p style="color:#d1fae5;">Pick an open slot below — no phone call or WhatsApp wait needed. Prefer to talk first? WhatsApp works too.</p></div>
     <div class="appt-card">
-      <span class="respond-badge">⚡ We respond within 1 hour</span>
-      <a class="wa-big-btn" href="https://wa.me/919537968007?text=Hi%2C%20I%20saw%20the%20demo%20website%20for%20Sevya%20Orthocare%20Centre%20(Dr.%20Arpit%20V.%20Joshi)%20and%20I%27d%20like%20to%20know%20more." target="_blank" rel="noopener">💬 Book on WhatsApp</a>
-      <div class="divider-or">— OR fill the form below —</div>
-      <form class="form-grid" onsubmit="event.preventDefault(); document.getElementById('formMsg4').style.display='block'; this.reset();">
-        <div><label>Full Name</label><input type="text" required placeholder="Your name"></div>
-        <div><label>Phone Number</label><input type="tel" required placeholder="10-digit mobile number"></div>
-        <div><label>Preferred Date</label><input type="date" required></div>
-        <div><label>Reason for Visit</label><input type="text" required placeholder="e.g. Joint replacement consult"></div>
-        <div class="full-span"><button type="submit" class="submit-btn">Request Appointment</button></div>
-      </form>
-      <p id="formMsg4" style="display:none; text-align:center; color:var(--teal-dark); font-weight:600; margin-top:12px;">✅ Thanks! This is a live demo — on your real site, this form sends an instant SMS/email alert to your clinic.</p>
-      <p class="demo-note">This demo form does not store or transmit data anywhere.</p>
+      <span class="respond-badge">⚡ Instant confirmation — no callback required</span>
+
+      <div class="booking-label">1. Choose a date</div>
+      <div class="date-tabs" id="dateTabs"></div>
+
+      <div class="slots-wrap">
+        <div class="booking-label" style="margin-bottom:0;">2. Choose a time</div>
+        <div class="slots-heading">Morning</div>
+        <div class="slots-grid" id="slotsMorning"></div>
+        <div class="slots-heading">Evening</div>
+        <div class="slots-grid" id="slotsEvening"></div>
+      </div>
+
+      <div class="confirm-panel" id="confirmPanel">
+        <div class="selected-summary" id="selectedSummary"></div>
+        <form class="form-grid" id="bookingForm" onsubmit="event.preventDefault(); document.getElementById('bookingForm').style.display='none'; document.getElementById('formMsg4').style.display='block';">
+          <div><label>Full Name</label><input type="text" required placeholder="Your name"></div>
+          <div><label>Phone Number</label><input type="tel" required placeholder="10-digit mobile number"></div>
+          <div class="full-span"><label>Reason for Visit</label><input type="text" required placeholder="e.g. Joint replacement consult"></div>
+          <div class="full-span"><button type="submit" class="submit-btn">Confirm Booking</button></div>
+        </form>
+        <p id="formMsg4" style="display:none; text-align:center; color:var(--teal-dark); font-weight:600; margin-top:4px;">✅ Booked! You'll get a confirmation on WhatsApp. (Live demo — on your real integration, this instantly reserves the slot and blocks it for other patients.)</p>
+      </div>
+
+      <div class="divider-or">— or skip straight to WhatsApp —</div>
+      <a class="wa-big-btn" href="https://wa.me/919537968007?text=Hi%2C%20I%20saw%20the%20demo%20website%20for%20Sevya%20Orthocare%20Centre%20(Dr.%20Arpit%20V.%20Joshi)%20and%20I%27d%20like%20to%20know%20more." target="_blank" rel="noopener">💬 Chat on WhatsApp Instead</a>
+      <p class="demo-note">This demo booking flow is fully interactive but does not store or transmit any data — it's here to show the experience, not run your real bookings yet.</p>
     </div>
   </div>
 </section>
+
+<script>
+(function(){
+  var DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var dates = [];
+  var d = new Date();
+  while (dates.length < 6) {
+    if (d.getDay() !== 0) { dates.push(new Date(d)); } // clinic closed Sunday
+    d.setDate(d.getDate() + 1);
+  }
+
+  function fmtSlot(h, m) {
+    var period = h >= 12 ? 'PM' : 'AM';
+    var h12 = h % 12; if (h12 === 0) h12 = 12;
+    return h12 + ':' + (m === 0 ? '00' : m) + ' ' + period;
+  }
+
+  function buildSlots(rangeStart, rangeEnd, dateIndex, seedOffset) {
+    var slots = [];
+    for (var h = rangeStart; h < rangeEnd; h++) {
+      [0, 30].forEach(function(m){
+        var id = dateIndex + '-' + h + '-' + m;
+        // deterministic pseudo-random "booked" pattern so it looks realistic but stable per date
+        var seed = (dateIndex * 31 + h * 7 + m + seedOffset) % 5;
+        var booked = seed === 0;
+        slots.push({ id: id, label: fmtSlot(h, m), booked: booked });
+      });
+    }
+    return slots;
+  }
+
+  var morningSlotsByDate = dates.map(function(dt, i){ return buildSlots(10, 13, i, 0); });
+  var eveningSlotsByDate = dates.map(function(dt, i){ return buildSlots(17, 20, i, 3); });
+
+  var activeDateIndex = 0;
+  var selectedSlot = null;
+
+  var dateTabsEl = document.getElementById('dateTabs');
+  var morningEl = document.getElementById('slotsMorning');
+  var eveningEl = document.getElementById('slotsEvening');
+  var confirmPanel = document.getElementById('confirmPanel');
+  var selectedSummary = document.getElementById('selectedSummary');
+
+  function renderDateTabs() {
+    dateTabsEl.innerHTML = '';
+    dates.forEach(function(dt, i){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'date-tab' + (i === activeDateIndex ? ' active' : '');
+      btn.innerHTML = '<span class="dow">' + DOW[dt.getDay()] + '</span><span class="dnum">' + dt.getDate() + ' ' + MON[dt.getMonth()] + '</span>';
+      btn.onclick = function(){ activeDateIndex = i; selectedSlot = null; confirmPanel.classList.remove('show'); render(); };
+      dateTabsEl.appendChild(btn);
+    });
+  }
+
+  function renderSlotGroup(container, slots) {
+    container.innerHTML = '';
+    slots.forEach(function(s){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'slot-btn' + (s.booked ? ' booked' : '') + (selectedSlot === s.id ? ' selected' : '');
+      btn.textContent = s.label;
+      if (s.booked) {
+        btn.disabled = true;
+      } else {
+        btn.onclick = function(){
+          selectedSlot = s.id;
+          var dt = dates[activeDateIndex];
+          selectedSummary.textContent = '✅ Selected: ' + DOW[dt.getDay()] + ', ' + dt.getDate() + ' ' + MON[dt.getMonth()] + ' at ' + s.label;
+          confirmPanel.classList.add('show');
+          document.getElementById('bookingForm').style.display = 'grid';
+          document.getElementById('formMsg4').style.display = 'none';
+          renderSlots();
+        };
+      }
+      container.appendChild(btn);
+    });
+  }
+
+  function renderSlots() {
+    renderSlotGroup(morningEl, morningSlotsByDate[activeDateIndex]);
+    renderSlotGroup(eveningEl, eveningSlotsByDate[activeDateIndex]);
+  }
+
+  function render() {
+    renderDateTabs();
+    renderSlots();
+  }
+
+  render();
+})();
+</script>
 <section id="timings">
   <div class="container">
     <div class="section-head"><h2>Clinic Timings &amp; Location</h2></div>
